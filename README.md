@@ -32,7 +32,24 @@ This bot is designed to automate arbitrage trading, which involves buying an ass
 ### 1. Clone/Download the Repository
 
 ### 2. Install Dependencies:
-`npm install`
+
+Install HardHat version 2:
+npm install --save-dev hardhat@^2.0.0
+
+Install a Specific version 2:
+npm install --save-dev hardhat@2.10.0 
+
+Install Node v18:
+npm install 18
+npm use 18
+
+npx hardhat compile (should work) 
+
+Then install ethers:
+npm install ethers@6
+
+Then install this:
+npm install --save-dev @nomicfoundation/hardhat-ethers
 
 ### 3. Create and Setup .env
 Before running any scripts, you'll want to create a .env file with the following values (see .env.example):

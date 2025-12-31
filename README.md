@@ -13,6 +13,11 @@ This trading bot leverages an **arbitrage strategy** to detect and profit from p
 ### Purpose:
 This bot is designed to automate arbitrage trading, which involves buying an asset on one exchange at a lower price and selling it on another exchange at a higher price. The goal is to make a profit from the price difference without requiring any initial capital, using **flash loans** to facilitate trades.
 
+### Author's Notes:
+I wanted to learn how to make and use an Arbitrage Flash Loan Trading Bot. I took a class at DAPP Univeristy about being a Block Chain Developer and it gave me alot of knowledge on the Block Chain. It also mentioned
+about how to use or make an Arbitrage Flash Loan Trading Bot. I downloaded there Bot and tried to make it work, but had problems. It worked somewhat but needed alot of tweeking. I then used AI (ChatGPT) at https://chatgpt.com/ to make changes and make it work on a Local Node or Local Block Chain on my computer. I did not test it on Mainnet but in theory, this Arbitrage Trading Bot will work on Mainnet. I also wanted to share what I did and let everyone who wants to trade crypto using flash loans have that opportunity. The way I see it, we are all in this world together and we need to help each other and give people ideas or ways 
+to get by in this world since there are alot of people trying to take away peoples freedoms and rights. This is one way to fight back. Enjoy the Bot and my next project is to make A Dynamic Arbitrage Flash Loan Trading Bot that will be able to trade between WETH and any other ERC-20 token on the block chain. This bot will be able to make a 1 to 1 trade like this bot, but will be able to trade with any other ERC-20 token and not be limited to 1 token like this bot. 
+
 ---
 
 ## Technology Stack & Tools

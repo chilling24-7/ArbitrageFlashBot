@@ -39,15 +39,15 @@ I also wanted to share what I did and let everyone who wants to trade crypto usi
 
 ### 2. Install Dependencies:
 
+Install Node v18:
+npm install 18
+npm use 18
+
 Install HardHat version 2:
 npm install --save-dev hardhat@^2.0.0
 
 Install a Specific version 2:
 npm install --save-dev hardhat@2.10.0 
-
-Install Node v18:
-npm install 18
-npm use 18
 
 npx hardhat compile (should work) 
 

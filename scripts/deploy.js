@@ -12,6 +12,7 @@ const { ethers } = hre;
 async function main() {
   console.log("Deploying Arbitrage contract...");
 
+  // Ensure router addresses are in the .env file
   const sRouter = process.env.SUSHI_ROUTER;
   const uRouter = process.env.UNI_ROUTER;
 
@@ -21,13 +22,37 @@ async function main() {
 
   const Arbitrage = await ethers.getContractFactory("Arbitrage");
 
-  // deploy contract — deploy() in Ethers v6 already waits for mining
-  const arbitrageContract = await Arbitrage.deploy(sRouter, uRouter);
+  // Get the network the script is running on
+  const network = hre.network.name;
 
-  console.log("Arbitrage contract deployed at:", arbitrageContract.target); // use `target` instead of `address`
+  // Set gas fee parameters for different networks (or use Hardhat's auto settings for localhost)
+  let gasOverrides = {};
+  
+  if (network !== "localhost") {
+    // For mainnet or testnets, fetch the current base fee and set gas params
+    const latestBlock = await ethers.provider.getBlock("latest");
+    const baseFeePerGas = latestBlock.baseFeePerGas;
+
+    // Optionally, you could fetch the priority fee for current network congestion
+    const priorityFeePerGas = ethers.utils.parseUnits("2", "gwei"); // Set a reasonable priority fee (2 gwei)
+
+    // Set maxFeePerGas (must be higher than baseFeePerGas)
+    const maxFeePerGas = baseFeePerGas.add(ethers.utils.parseUnits("10", "gwei")); // Add some buffer (10 gwei)
+
+    gasOverrides = {
+      maxFeePerGas,
+      maxPriorityFeePerGas: priorityFeePerGas,
+    };
+  }
+
+  // Deploy the contract with overrides for gas fees (if necessary)
+  const arbitrageContract = await Arbitrage.deploy(sRouter, uRouter, gasOverrides);
+
+  console.log("Arbitrage contract deployed at:", arbitrageContract.target);
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+main()
+  .catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });

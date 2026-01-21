@@ -1,10 +1,3 @@
-// We require the Hardhat Runtime Environment explicitly here. This is optional
-// but useful for running the script in a standalone fashion through `node <script>`.
-//
-// You can also run a script with `npx hardhat run <script>`. If you do that, Hardhat
-// will compile your contracts, add the Hardhat Runtime Environment's members to the
-// global scope, and execute the script.
-
 require("dotenv").config();
 const hre = require("hardhat");
 const { ethers } = hre;
@@ -25,19 +18,22 @@ async function main() {
   // Get the network the script is running on
   const network = hre.network.name;
 
-  // Set gas fee parameters for different networks (or use Hardhat's auto settings for localhost)
   let gasOverrides = {};
-  
-  if (network !== "localhost") {
-    // For mainnet or testnets, fetch the current base fee and set gas params
+
+  // If we are deploying on localhost, we should use a higher gas price to avoid issues
+  if (network === "localhost") {
+    const highGasPrice = ethers.parseUnits("100", "gwei"); // Use high gas price for localhost (100 Gwei)
+    gasOverrides = {
+      maxFeePerGas: highGasPrice,  // Set maxFeePerGas
+      maxPriorityFeePerGas: ethers.parseUnits("2", "gwei"), // Set maxPriorityFeePerGas (e.g., 2 Gwei)
+    };
+  } else {
+    // For mainnet or testnets, use the latest baseFeePerGas and priorityFeePerGas
     const latestBlock = await ethers.provider.getBlock("latest");
     const baseFeePerGas = latestBlock.baseFeePerGas;
+    const priorityFeePerGas = ethers.parseUnits("2", "gwei"); // Reasonable priority fee (2 Gwei)
 
-    // Optionally, you could fetch the priority fee for current network congestion
-    const priorityFeePerGas = ethers.utils.parseUnits("2", "gwei"); // Set a reasonable priority fee (2 gwei)
-
-    // Set maxFeePerGas (must be higher than baseFeePerGas)
-    const maxFeePerGas = baseFeePerGas.add(ethers.utils.parseUnits("10", "gwei")); // Add some buffer (10 gwei)
+    const maxFeePerGas = baseFeePerGas.add(ethers.parseUnits("10", "gwei")); // Buffer for maxFeePerGas
 
     gasOverrides = {
       maxFeePerGas,
@@ -45,7 +41,7 @@ async function main() {
     };
   }
 
-  // Deploy the contract with overrides for gas fees (if necessary)
+  // Deploy the contract with gasOverrides and constructor parameters
   const arbitrageContract = await Arbitrage.deploy(sRouter, uRouter, gasOverrides);
 
   console.log("Arbitrage contract deployed at:", arbitrageContract.target);
